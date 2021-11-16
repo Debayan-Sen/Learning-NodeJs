@@ -1,0 +1,27 @@
+{
+  "name": "learning-nodejs",
+  "version": "1.0.0",
+  "description": "trying nodejs",
+  "main": "index.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/Debayan-Sen/Learning-NodeJs.git"
+  },
+  "keywords": [
+    "learning"
+  ],
+  "author": "Debayan Sen",
+  "license": "ISC",
+  "bugs": {
+    "url": "https://github.com/Debayan-Sen/Learning-NodeJs/issues"
+  },
+  "homepage": "https://github.com/Debayan-Sen/Learning-NodeJs#readme",
+  "dependencies": {
+    "colors": "^1.4.0",
+    "express": "^4.17.1",
+    "simple-node-logger": "^21.8.12"
+  }
+}
