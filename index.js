@@ -109,35 +109,95 @@
 // console.log(a+b);    //executing at first
 
 
-//expressJs intro
-const express = require('express');
-const app = express();
-app.get('',(req, res)=>{
-    res.send(`
-    <h1>Hello, this is Home Page</h1>
-    <a href = "/about"> Go to About Us </a>
-    <a href = "/help"> Go to Help </a>
-    `);
-});
-app.get('/about',(req,res)=>{
-    res.send(`
-        <input type="text" placeholder="Username" value = ${req.query.name}>
-        <button>Click Me</button>
-        <br>
-        <a href = "/"> Go to Home </a>
+// //expressJs intro
+// const express = require('express');
+// const app = express();
+// app.get('',(req, res)=>{
+//     res.send(`
+//     <h1>Hello, this is Home Page</h1>
+//     <a href = "/about"> Go to About Us </a>
+//     <a href = "/help"> Go to Help </a>
+//     `);
+// });
+// app.get('/about',(req,res)=>{
+//     res.send(`
+//         <input type="text" placeholder="Username" value = ${req.query.name}>
+//         <button>Click Me</button>
+//         <br>
+//         <a href = "/"> Go to Home </a>
 
-    `);
-});
-app.get('/help',(req,res)=>{
-    res.send([
-        {
-            name:'Debayan',
-            roll:'223'
-        },
-        {
-            name:'Ram',
-            roll:'232'
-        }
-    ]);
-});
+//     `);
+// });
+// app.get('/help',(req,res)=>{
+//     res.send([
+//         {
+//             name:'Debayan',
+//             roll:'223'
+//         },
+//         {
+//             name:'Ram',
+//             roll:'232'
+//         }
+//     ]);
+// });
+// app.listen(7521);
+
+
+// //Making HTML page
+// const express = require('express');
+// const path = require('path');   //helps to find path of working dir
+
+// const app = express();
+// const publicPaath = path.join(__dirname,'public');
+
+// // app.use(express.static(publicPaath));   //static() helps to lload static html
+// app.get('/aboutme', (_,res) => {
+//     res.sendFile(`${publicPaath}/about.html`);  //like this any file can be accessed without revealing filename,extension
+// })
+// app.get('/help', (_,res) => {
+//     res.sendFile(`${publicPaath}/help.html`);
+// })
+// app.get('/home', (_,res) => {
+//     res.sendFile(`${publicPaath}/index.html`);
+// })
+// app.get('*', (_,res) => {
+//     res.sendFile(`${publicPaath}/notfound.html`);   
+// })
+// app.listen(7521);
+
+
+//using ejs template engine
+const express = require('express');
+const path = require('path');   //helps to find path of working dir
+
+const app = express();
+const publicPaath = path.join(__dirname,'public');
+
+app.set('view engine', 'ejs');
+
+// app.use(express.static(publicPaath));   //static() helps to lload static html
+app.get('/aboutme', (_,res) => {
+    res.sendFile(`${publicPaath}/about.html`);  //like this any file can be accessed without revealing filename,extension
+})
+app.get('/profile', (_,res)=>{
+    const user = {
+        name : "Debayan sen",
+        email : "sdebayan999@gmail.com",
+        city : "kolkata",
+        skills : ['python' , 'C++', 'Java', 'Js']
+    }
+    res.render('profile', {user});
+})
+app.get('/login', (_,res)=>{
+    res.render('login')
+})
+app.get('/help', (_,res) => {
+    res.sendFile(`${publicPaath}/help.html`);
+})
+app.get('/home', (_,res) => {
+    res.sendFile(`${publicPaath}/index.html`);
+})
+app.get('*', (_,res) => {
+    res.sendFile(`${publicPaath}/notfound.html`);
+})
 app.listen(7521);
