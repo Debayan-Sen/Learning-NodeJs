@@ -1,34 +1,58 @@
-// const { response } = require('express');
-// const {MongoClient} = require('mongodb');
-// // const MongoClient = require('mongodb').MongoClient;
-// const url = 'mongodb://localhost:27017';
-// const client = new MongoClient(url);
-// const database = 'city';
+const mongoose = require('mongoose');
 
-// async function dbConnect(){
-//     let result = await client.connect();
-//     let db = result.db(database);
-//     return db.collection('Building');   //returns promise
-//     // let response = await collection.find({}).toArray();
-//     // console.log(response);
-// }
+mongoose.connect("mongodb://localhost:27017/city");
 
+const BuildingSchema = new mongoose.Schema({
+    name:String,
+    people:Number,
+    type:String,
+    status:String
+});
 
-//database connection in another file
-const dbConnect = require('./mongodb')
-
-// dbConnect().then((resp)=>{
-//     // console.warn(resp.find().toArray())     //returns promise
-//     resp.find({color:'red'}).toArray().then((data)=>{
-//         console.warn(data);
-//     });
-// });
-
-
-const main = async ()=>{
-    let data = await dbConnect();
-    data = await data.find({name:'vishal'}).toArray();
-    console.warn(data);
+const saveInDB = async ()=>{
+    const Building = mongoose.model('buildings', BuildingSchema);
+    let data = new Building({
+        name:"Aircel",
+        people:120,
+        status:"closed",
+        type:"office"
+    });
+    let result = await data.save();
+    console.log(result);
 }
 
-main();
+const updateInDB = async ()=>{
+    const Building = mongoose.model('buildings', BuildingSchema);
+    let data = await Building.updateOne(
+        {name:"IDEA"},{
+            $set:{
+                name:"VI",
+                people:1290,
+                status:"open"
+            }
+        }
+    )
+    console.log(data);
+}
+
+const deleteInDB = async ()=>{
+    const Building = mongoose.model('buildings', BuildingSchema);
+    let data = await Building.deleteOne({name:"Vodafone"});
+    console.log(data);
+    if(data.deletedCount==1){
+        console.log("data deleted!!");
+    }else{
+        console.log("data not present!!");
+    }
+}
+
+const findInDB = async ()=>{
+    const Building = mongoose.model('buildings', BuildingSchema);
+    let data = await Building.find({name:"VI"});
+    console.log(data);
+}
+
+findInDB();
+// deleteInDB();
+// saveInDB();
+// updateInDB();
