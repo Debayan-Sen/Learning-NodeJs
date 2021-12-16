@@ -1,58 +1,36 @@
-const mongoose = require('mongoose');
+const express = require('express');
+require('./config');
+const Building = require('./building');
 
-mongoose.connect("mongodb://localhost:27017/city");
-
-const BuildingSchema = new mongoose.Schema({
-    name:String,
-    people:Number,
-    type:String,
-    status:String
+const app = express();
+app.use(express.json());
+app.post("/create", async (req, resp) => {
+    let data = Building(req.body);
+    let result = await data.save();
+    console.log(req.body);
+    resp.send(result);
 });
 
-const saveInDB = async ()=>{
-    const Building = mongoose.model('buildings', BuildingSchema);
-    let data = new Building({
-        name:"Aircel",
-        people:120,
-        status:"closed",
-        type:"office"
-    });
-    let result = await data.save();
-    console.log(result);
-}
+app.get("/list", async (req, resp) => {
+    let data = await Building.find();
+    resp.send(data);
+});
 
-const updateInDB = async ()=>{
-    const Building = mongoose.model('buildings', BuildingSchema);
+app.delete("/delete/:_id", async (req, resp) => {
+    console.log(req.params);
+    let data = await Building.deleteOne(req.params);
+    resp.send(data);
+});
+
+app.put("/update/:_id", async (req, resp) => {
+    console.log(req.params);
     let data = await Building.updateOne(
-        {name:"IDEA"},{
-            $set:{
-                name:"VI",
-                people:1290,
-                status:"open"
-            }
+        req.params,
+        {
+            $set: req.body
         }
-    )
-    console.log(data);
-}
+    );
+    resp.send(data);
+})
 
-const deleteInDB = async ()=>{
-    const Building = mongoose.model('buildings', BuildingSchema);
-    let data = await Building.deleteOne({name:"Vodafone"});
-    console.log(data);
-    if(data.deletedCount==1){
-        console.log("data deleted!!");
-    }else{
-        console.log("data not present!!");
-    }
-}
-
-const findInDB = async ()=>{
-    const Building = mongoose.model('buildings', BuildingSchema);
-    let data = await Building.find({name:"VI"});
-    console.log(data);
-}
-
-findInDB();
-// deleteInDB();
-// saveInDB();
-// updateInDB();
+app.listen(7500);
